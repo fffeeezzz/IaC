@@ -1,95 +1,60 @@
-# - hosts: app
-#   become: true
-#   tasks:
-#     - name: docker | install requirements
-#       ansible.builtin.apt:
-#         name:
-#           - ca-certificates
-#           - curl
-#           - gnupg
-#         state: present
-#         update_cache: yes
-    
-#     # - name: docker | ensure /etc/apt/keyrings/ exists
-#     #   ansible.builtin.file:
-#     #     path: "/etc/apt/keyrings/"
-#     #     mode: 0755
-#     #     owner: root
-#     #     group: root
-#     #     state: directory
+- hosts: app
+  become: true
+  tasks:
+    - name: docker | install requirements
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+        update_cache: yes
 
-#     # - name: docker | install keyring
-#     #   ansible.builtin.get_url:
-#     #     url: https://download.docker.com/linux/ubuntu/gpg
-#     #     dest: /etc/apt/keyrings/docker.asc
-
-#     - name: docker | add apt key
-#       ansible.builtin.apt_key:
-#        url: https://download.docker.com/linux/ubuntu/gpg
-#       #  file: /etc/apt/keyrings/docker.asc
-    
+    - name: docker | add apt key
+      ansible.builtin.apt_key:
+       url: https://download.docker.com/linux/ubuntu/gpg
   
-#     - name: docker | add docker repository
-#       ansible.builtin.apt_repository:
-#         repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
-#         state: present
+    - name: docker | add docker repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
+        state: present
     
-#     - name: docker | install docker
-#       ansible.builtin.apt:
-#         name: "docker-ce"
-#         state: present
+    - name: docker | install docker
+      ansible.builtin.apt:
+        name: "docker-ce"
+        state: present
 
-#     - name: docker | ensure docker is started
-#       ansible.builtin.service:
-#         name: "docker"
-#         state: started
-#         enabled: yes
+    - name: docker | ensure docker is started
+      ansible.builtin.service:
+        name: "docker"
+        state: started
+        enabled: yes
 
-#     - name: docker | ensure group "docker" exists
-#       ansible.builtin.group:
-#         name: docker
-#         state: present
+    - name: docker | ensure group "docker" exists
+      ansible.builtin.group:
+        name: docker
+        state: present
     
-#     - name: docker | adding dportnov to docker group
-#       ansible.builtin.user:
-#         name: dportnov
-#         groups: docker
-#         append: yes
-
-
-    
-    #  - name: django create superuser | asdg
-    #   django_manage:
-    #     virtualenv: /.../app
-    #     app_path: /.../app
-    #     command: "createsuperuser --noinput --username=admin --email=admin@{{ inventory_hostname }}"
-    #   ignore_errors: yes
-    
+    - name: docker | adding dportnov to docker group
+      ansible.builtin.user:
+        name: dportnov
+        groups: docker
+        append: yes
 
 
 - hosts: app
   become: true
   tasks:
-    # - name: django app | create docker container
-    #   community.docker.docker_container:
-    #     name: django_app
-    #     image: timurbabs/django
-    #     state: present
-    #     ports:
-    #     - 8000:8000
+    - name: django app | create docker container
+      community.docker.docker_container:
+        name: django_app
+        image: timurbabs/django
+        state: present
+        ports:
+        - 8000:8000
       
-    # - name: django app | start docker container
-    #   community.docker.docker_container:
-    #     name: django_app
-    #     state: started
-    #     restart: true
-
-    - name: django_app | create superuser dportnov
-      community.docker.docker_container_exec:
-        container: django_app
-        command: python3 manage.py createsuperuser --noinput --username=dportnov --email=dportnov@mail.ru
-        env:
-          DJANGO_SUPERUSER_PASSWORD: qwerty
-        chdir: /app
-      register: result
-  
+    - name: django app | start docker container
+      community.docker.docker_container:
+        name: django_app
+        state: started
+        restart: true
