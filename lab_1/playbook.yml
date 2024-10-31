@@ -1,0 +1,62 @@
+- name: Установка Docker
+  hosts: app
+  become: true
+  tasks:
+    - name: Установка зависимостей
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+        update_cache: yes
+
+    - name: Добавление GPG ключа Docker
+      ansible.builtin.apt_key:
+       url: https://download.docker.com/linux/ubuntu/gpg
+  
+    - name: Добавление Docker репозитория
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
+        state: present
+    
+    - name: Установка Docker
+      ansible.builtin.apt:
+        name: "docker-ce"
+        state: present
+
+    - name: Проверка, что Docker запущен
+      ansible.builtin.service:
+        name: "docker"
+        state: started
+        enabled: yes
+
+    - name: Проверка, что группа "docker" существует
+      ansible.builtin.group:
+        name: docker
+        state: present
+    
+    - name: Добавление пользователя "ansible_user" в группу "docker"
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+    
+
+- name: Запуск Django приложения
+  hosts: app
+  become: true
+  tasks:
+    - name: Создание Docker контейнера Django приложения
+      community.docker.docker_container:
+        name: django_app
+        image: timurbabs/django
+        state: present
+        ports:
+        - 8000:8000
+    
+    - name: Запуск контейнера Docker с Django приложением
+      community.docker.docker_container:
+        name: django_app
+        state: started
+        restart: true
