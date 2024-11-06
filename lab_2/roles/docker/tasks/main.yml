@@ -1,0 +1,8 @@
+---
+# tasks file for ansible-role-docker
+
+- name: Include vars
+  ansible.builtin.include_vars: "{{ role_path }}/vars/{{ ansible_architecture }}.yml"
+
+- import_tasks: install.yml
+- import_tasks: docker_users.yml

@@ -1,0 +1,11 @@
+---
+# defaults file for ansible-role-docker
+
+# Docker repo URL.
+docker_repo_url: "https://download.docker.com/linux/{{ ansible_distribution|lower }}"
+
+# Docker GPG key URL.
+docker_gpg_key_url: "{{ docker_repo_url }}/gpg"
+
+# Users in "docker" group
+docker_users: []

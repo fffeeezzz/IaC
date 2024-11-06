@@ -1,0 +1,23 @@
+- name: Установка Docker
+  hosts: app
+  become: true
+  roles:
+    - docker
+
+- name: Запуск Django приложения
+  hosts: app
+  become: true
+  tasks:
+    - name: Создание Docker контейнера Django приложения
+      community.docker.docker_container:
+        name: django_app
+        image: timurbabs/django
+        state: present
+        ports:
+          - 8000:8000
+
+    - name: Запуск контейнера Docker с Django приложением
+      community.docker.docker_container:
+        name: django_app
+        state: started
+        restart: true
