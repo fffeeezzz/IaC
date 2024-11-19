@@ -1,5 +1,5 @@
 [app]
-62.84.119.52 ansible_ssh_user=dportnov
+51.250.91.188 ansible_ssh_user=dportnov
 
 [web]
-62.84.119.52 ansible_ssh_user=dportnov
+51.250.91.188 ansible_ssh_user=dportnov

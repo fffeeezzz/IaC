@@ -17,7 +17,7 @@
     var: config_check
   when:
     - config_check['rc'] != 0
-  listen: Restart nginx
+  listen: Restart Nginx
 
 # Рестарт Nginx
 - name: Restart Nginx Service
@@ -26,4 +26,4 @@
     state: reloaded
   when:
     - config_check['rc'] == 0
-  listen: Restart nginx
+  listen: Restart Nginx
