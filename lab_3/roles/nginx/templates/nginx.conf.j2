@@ -1,0 +1,15 @@
+events {
+    worker_connections {{ nginx_worker_connections }};
+}
+
+http {
+    server {
+        listen  {{ nginx_port }};
+        location / {
+            proxy_pass  http://{{ nginx_proxy_ip }}:{{ nginx_proxy_port }}/;
+        }
+        location /static/ {
+            alias {{ nginx_static_path }};
+      }
+    }
+}

@@ -1,0 +1,29 @@
+---
+# handlers file for ansible-role-nginx
+
+# Валидация конфига Nginx
+- name: Validate Nginx config
+  ansible.builtin.command:
+    cmd: nginx -t
+  register: config_check
+  ignore_errors: true
+  check_mode: false
+  changed_when: false
+  listen: Restart nginx
+
+# Вывод ошибок конфига Nginx
+- name: Print Nginx error if syntax check fails
+  ansible.builtin.debug:
+    var: config_check
+  when:
+    - config_check['rc'] != 0
+  listen: Restart nginx
+
+# Рестарт Nginx
+- name: Restart Nginx Service
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+  when:
+    - config_check['rc'] == 0
+  listen: Restart nginx

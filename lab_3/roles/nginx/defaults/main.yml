@@ -1,0 +1,17 @@
+---
+# defaults file for nginx
+
+# порт nginx
+nginx_port: 80
+
+# порт сервера, на который будут проксироваться запросы
+nginx_proxy_port: 8000
+
+# айпи сервера, на который будут проксироваться запросы
+nginx_proxy_ip: localhost
+
+# директория со статическими файлами
+nginx_static_path: /var/html/static/
+
+# кол-во соединений
+nginx_worker_connections: 1024

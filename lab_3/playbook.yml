@@ -1,0 +1,56 @@
+- name: Установка Docker
+  hosts: app
+  become: true
+  roles:
+    - docker
+
+- name: Запуск Django приложения
+  hosts: app
+  become: true
+  tasks:
+    - name: Создание Docker контейнера Django приложения
+      community.docker.docker_container:
+        name: django_app
+        image: timurbabs/django
+        state: present
+        ports:
+          - 8000:8000
+
+    - name: Запуск контейнера Docker с Django приложением
+      community.docker.docker_container:
+        name: django_app
+        state: started
+        restart: true
+
+
+- name: Установка Nginx
+  hosts: web
+  become: true
+  roles:
+    - nginx
+
+# Копирование статических файлов из репозитория
+- name: Django static files
+  hosts: web
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Клонирование репозитория
+      ansible.builtin.git:
+        repo: https://github.com/mdn/django-locallibrary-tutorial.git
+        version: main
+        dest: /home/{{ ansible_user }}/app
+        clone: true
+        update: false
+
+    - name: Копирование статики
+      ansible.builtin.copy:
+        remote_src: true
+        src: /home/{{ ansible_user }}/app/catalog/static/
+        dest: /var/html/static/
+        mode: u=rwx,g=rx,o=rx
+
+    - name: Удаление репозитория
+      ansible.builtin.file:
+        path: /home/{{ ansible_user }}/app
+        state: absent

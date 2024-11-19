@@ -1,0 +1,32 @@
+---
+
+# tasks file for install docker for ansible-role-docker
+
+- name: Установка зависимостей
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+    update_cache: yes
+
+- name: Добавление GPG ключа Docker
+  ansible.builtin.apt_key:
+    url: "{{ docker_gpg_key_url }}"
+
+- name: Добавление Docker репозитория
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ _docker_arch }}] {{ docker_repo_url }} {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: Установка Docker
+  ansible.builtin.apt:
+    name: "docker-ce"
+    state: present
+
+- name: Проверка, что Docker запущен
+  ansible.builtin.service:
+    name: "docker"
+    state: started
+    enabled: yes

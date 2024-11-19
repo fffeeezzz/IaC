@@ -1,0 +1,5 @@
+[app]
+62.84.119.52 ansible_ssh_user=dportnov
+
+[web]
+62.84.119.52 ansible_ssh_user=dportnov
