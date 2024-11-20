@@ -1,5 +1,5 @@
 ---
-# tasks file for nginx
+# tasks file for ansible-role-nginx
 
 # Установка Nginx
 - name: Install Nginx

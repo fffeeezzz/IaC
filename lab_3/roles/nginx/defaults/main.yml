@@ -1,5 +1,5 @@
 ---
-# defaults file for nginx
+# defaults file for ansible-role-nginx
 
 # порт nginx
 nginx_port: 80
