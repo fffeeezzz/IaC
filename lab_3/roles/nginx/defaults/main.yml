@@ -13,5 +13,6 @@ nginx_proxy_ip: localhost
 # директория со статическими файлами
 nginx_static_path: /var/html/static/
 
-# кол-во соединений
-nginx_worker_connections: 1024
+# пути для хранения кастомного конфига nginx
+nginx_conf_src: nginx.conf.j2
+nginx_conf_dest: /etc/nginx/conf.d/custom_nginx.conf

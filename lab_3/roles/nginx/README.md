@@ -18,8 +18,9 @@ Role Variables
 4. директория со статическими файлами
     - nginx_static_path: /var/html/static/ (по умолчанию)
 
-5. кол-во соединений
-    - nginx_worker_connections: 1024 (по умолчанию)
+5. пути для хранения кастомного конфига nginx
+    - nginx_conf_src: nginx.conf.j2
+    - nginx_conf_dest: /etc/nginx/conf.d/custom_nginx.conf
 
 Example Playbook
 ----------------
