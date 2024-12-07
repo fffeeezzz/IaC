@@ -1,0 +1,10 @@
+galaxy_info:
+  author: we
+  description: openvpn role
+  namespace: we
+  role_name: openvpn
+  license: MIT
+  min_ansible_version: 2.1
+  galaxy_tags: []
+dependencies: []
+

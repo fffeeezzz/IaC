@@ -1,0 +1,62 @@
+---
+
+- name: "CA init-pki"
+  command:
+    cmd: "./easyrsa init-pki"
+    chdir: "{{ easy_rsa_path }}"
+    creates: "{{ easy_rsa_path }}/pki"
+
+- name: Создаем CA и сервер сертификаты
+  block:
+    - name: "CA create CA cert & key"
+      command:
+        cmd: "./easyrsa build-ca nopass"
+        chdir: "{{ easy_rsa_path }}"
+        creates: "{{ easy_rsa_pki_path }}/ca.crt"
+
+    - name: server | Easyrsa build-server-full server nopass
+      ansible.builtin.command:
+        cmd: "./easyrsa build-server-full server nopass"
+        chdir: "{{ easy_rsa_path }}"
+        creates: "{{ easy_rsa_pki_path }}/issued/server.crt"
+      environment:
+        EASYRSA_BATCH: "yes"
+
+    - name: server | Easyrsa build-client-full client nopass
+      ansible.builtin.command:
+        cmd: "./easyrsa build-client-full client nopass"
+        chdir: "{{ easy_rsa_path }}"
+        creates: "{{ easy_rsa_pki_path }}/issued/client.crt"
+      environment:
+        EASYRSA_BATCH: "yes"
+
+    - name: "server create Diffie-Hellman.pem"
+      command:
+        cmd: "./easyrsa gen-dh"
+        chdir: "{{ easy_rsa_path }}"
+        creates: "{{ easy_rsa_pki_path }}/dh.pem"
+
+    - name: server | Openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
+      ansible.builtin.command:
+        cmd: "openvpn --genkey --secret pki/ta.key"
+        creates: "{{ easy_rsa_pki_path }}/ta.key"
+
+- name: Проверяем наличие openvpn
+  file:
+    path: /etc/openvpn
+    state: directory
+    mode: '0755'
+
+- name: Копируем все необходимые файлы в openvpn
+  copy:
+    src: "{{ item }}"
+    dest: "{{ openvpn_config_path }}/"
+    remote_src: yes
+  with_items:
+    - "{{ easy_rsa_pki_path }}/ca.crt"
+    - "{{ easy_rsa_pki_path }}/issued/server.crt"
+    - "{{ easy_rsa_pki_path }}/issued/client.crt"
+    - "{{ easy_rsa_pki_path }}/private/server.key"
+    - "{{ easy_rsa_pki_path }}/private/client.key"
+    - "{{ easy_rsa_pki_path }}/dh.pem"
+    - "{{ easy_rsa_pki_path }}/ta.key"
