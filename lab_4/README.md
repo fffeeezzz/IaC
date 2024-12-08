@@ -1,6 +1,6 @@
 # 4 лабораторная работа
 
-## Создали роль "ansible-role-nginx" для установки Nginx и вынесли в отдельный репозиторий
+## Создали роль "ansible-role-openvpn" для установки OpenVPN и вынесли в отдельный репозиторий
 
 - https://github.com/fffeeezzz/ansible-role-openvpn
 
@@ -8,7 +8,7 @@
 
 Подробное описание в ридми роли
 
-## Создать файл requirements.yml для установки роли Nginx из репозитория
+## Создать файл requirements.yml для установки роли OpenVPN из репозитория
 
 Добавили нашу роль и установили с помощью команды ansible-galaxy install -p ./roles/ -r requirements.yml
 
