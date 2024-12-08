@@ -7,9 +7,9 @@ openvpn_user: nobody
 openvpn_group: nogroup
 openvpn_cipher: AES-256-CBC
 openvpn_keepalive: "10 120"
-easy_rsa_path: /home/dportnov/easy-rsa
-
-easy_rsa_pki_path: /home/dportnov/easy-rsa/pki
+openvpn_easy_rsa_path: /home/dportnov/easy-rsa
+openvpn_easyrsa_tool_path: /usr/share/easy-rsa
+openvpn_easy_rsa_pki_path: /home/dportnov/easy-rsa/pki
 openvpn_config_path: /etc/openvpn
 openvpn_server_config_name: server.ovpn.j2
 openvpn_client_config_name: client.ovpn.j2

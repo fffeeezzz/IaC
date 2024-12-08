@@ -1,6 +1,5 @@
 ---
-
-- name: Утанавливаем openvpn и easy-rsa
+- name: Install openvpn and easy-rsa
   ansible.builtin.apt:
     name:
       - openvpn
@@ -8,9 +7,9 @@
     state: present
     update_cache: yes
 
-- name: Проверяем наличие папки Easy-RSA
+- name: Ensure Easy-RSA directory exists
   ansible.builtin.file:
-    path: "{{ easy_rsa_path }}"
+    path: "{{ openvpn_easy_rsa_path }}"
     state: "directory"
     mode: "0755"
 
@@ -18,21 +17,15 @@
   ansible.builtin.include_tasks:
     file: "setup-ca.yml"
 
-- name: Применяем серверный openvpn конфиг
+- name: Place server conf
   template:
     src: "{{ openvpn_server_config_name }}"
     dest: "{{ openvpn_config_path }}/server.ovpn"
+  notify: Restart OpenVPN
 
-# todo: мб не надо или надо хуй его знает
-- name: Запускаем openvpn сервер
-  systemd:
-    name: openvpn@server
-    state: started
-    enabled: yes
-
-- name: Создаем конфиг для клиента
+- name: Place client conf
   template:
     src: "{{ openvpn_client_config_name }}"
     dest: "{{ openvpn_config_path }}/client.ovpn"
-
+  notify: Restart OpenVPN
 
