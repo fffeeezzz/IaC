@@ -30,7 +30,7 @@ Example Playbook
 
 ```yaml
 - name: openvpn
-  src: git+https://gitlab.com/ansible-roles7831444/ansible-role-nginx.git
+  src: git+https://github.com/fffeeezzz/ansible-role-openvpn.git
 ```
 
 Использование в плейбуке
