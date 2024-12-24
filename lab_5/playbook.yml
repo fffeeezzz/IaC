@@ -1,0 +1,20 @@
+---
+- name: Устанавливаем мастер PostgreSQL
+  hosts: master
+  become: true
+  tasks:
+    - name: Подключаем таски PostgreSQL для мастера
+      include_role:
+        name: postgres
+      vars:
+        postgres_role: master
+
+- name: Устанавливаем реплику
+  hosts: replica
+  become: true
+  tasks:
+    - name: Подключаем таски PostgreSQL для реплики
+      include_role:
+        name: postgres
+      vars:
+        postgres_role: replica
