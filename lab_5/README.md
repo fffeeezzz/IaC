@@ -8,11 +8,11 @@
 
 Подробное описание в ридми роли
 
-## Создать файл requirements.yml для установки роли OpenVPN из репозитория
+## Создать файл requirements.yml для установки роли PostgreSQL из репозитория
 
 Добавили нашу роль и установили с помощью команды ansible-galaxy install -p ./roles/ -r requirements.yml
 
-## Установили OpenVPN, используя плейбук с ролью OpenVPN
+## Установили PostgreSQL, используя плейбук с ролью postres
 
 ```yaml
 ---
