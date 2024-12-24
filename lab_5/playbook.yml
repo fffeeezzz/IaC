@@ -6,8 +6,6 @@
     - name: Подключаем таски PostgreSQL для мастера
       include_role:
         name: postgres
-      vars:
-        postgres_role: master
 
 - name: Устанавливаем реплику
   hosts: replica
@@ -16,5 +14,3 @@
     - name: Подключаем таски PostgreSQL для реплики
       include_role:
         name: postgres
-      vars:
-        postgres_role: replica
